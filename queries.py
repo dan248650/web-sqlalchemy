@@ -1,5 +1,5 @@
 from data.db_session import global_init, create_session
-from data.__all_models import User, Jobs
+from data.__all_models import User, Jobs, Department
 
 
 def get_colonists_from_module1():
@@ -135,6 +135,42 @@ def update_address_for_young_colonists():
     db_sess.commit()
 
     return colonists_to_update
+
+
+def get_department_workers_with_hours():
+    """
+    Подключается к базе данных и выводит фамилии и имена работников департамента id=1,
+    у которых суммарное количество отработанных часов больше 25
+    """
+    db_sess = create_session()
+
+    department = db_sess.query(Department).filter(Department.id == 1).first()
+
+    workers = department.members
+
+    result = []
+    for worker in workers:
+        job_ids = set()
+        total_hours = 0
+
+        for job in worker.jobs:
+            if job.id not in job_ids:
+                job_ids.add(job.id)
+                total_hours += job.work_size
+
+        all_jobs = db_sess.query(Jobs).all()
+        for job in all_jobs:
+            if job.collaborators:
+                collab_ids = [int(id.strip()) for id in job.collaborators.split(',')]
+                if worker.id in collab_ids and job.id not in job_ids:
+                    job_ids.add(job.id)
+                    total_hours += job.work_size
+
+        if total_hours > 25:
+            result.append(worker)
+            print(f"{worker.surname} {worker.name}")
+
+    return result
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@ import sqlalchemy
 from sqlalchemy import orm
 from data.db_session import SqlAlchemyBase
 from werkzeug.security import generate_password_hash, check_password_hash
-from data.associations import user_role
+from data.associations import user_role, department_members
 from datetime import datetime
 
 
@@ -24,6 +24,18 @@ class User(SqlAlchemyBase):
 
     jobs = orm.relationship('Jobs', back_populates='user')
     roles = orm.relationship('Role', secondary='user_role', back_populates='users')
+
+    chief_of_departments = orm.relationship(
+        'Department',
+        foreign_keys='Department.chief',
+        back_populates='chief_user'
+    )
+
+    member_of_departments = orm.relationship(
+        'Department',
+        secondary='department_members',
+        back_populates='members'
+    )
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

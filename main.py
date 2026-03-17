@@ -5,7 +5,7 @@ import datetime
 from routes.routes import register_all_blueprints
 from configs.configs import app
 from data.db_session import create_session
-from data.__all_models import User, Jobs
+from data.__all_models import User, Jobs, Department
 
 
 def add_sample_users():
@@ -110,6 +110,48 @@ def add_first_job():
     db_sess.commit()
 
 
+def add_sample_departments():
+    db_sess = create_session()
+
+    if db_sess.query(Department).first() is not None:
+        print("Департаменты уже существуют в базе данных")
+        return
+
+    scott = db_sess.query(User).filter(User.email == 'scott_chief@mars.org').first()
+    taylor = db_sess.query(User).filter(User.email == 'robert.taylor@mars.org').first()
+    jones = db_sess.query(User).filter(User.email == 'william.jones@mars.org').first()
+    harrington = db_sess.query(User).filter(User.email == 'arthur.harrington@mars.org').first()
+    frost = db_sess.query(User).filter(User.email == 'jack.frost@mars.org').first()
+
+    if not all([scott, taylor, jones, harrington, frost]):
+        print("Не все пользователи найдены в базе данных")
+        return
+
+    engineering_dept = Department(
+        title='Engineering Department',
+        chief=scott.id,
+        email='engineering@mars.org'
+    )
+    engineering_dept.members = [taylor, jones, frost]
+
+    science_dept = Department(
+        title='Science Department',
+        chief=harrington.id,
+        email='science@mars.org'
+    )
+    science_dept.members = [taylor, harrington]
+
+    security_dept = Department(
+        title='Security Department',
+        chief=frost.id,
+        email='security@mars.org'
+    )
+    security_dept.members = [frost, scott]
+
+    db_sess.add_all([engineering_dept, science_dept, security_dept])
+    db_sess.commit()
+
+
 register_all_blueprints(app)
 
 
@@ -127,4 +169,5 @@ if __name__ == '__main__':
     with app.app_context():
         add_sample_users()
         add_first_job()
+        add_sample_departments()
     app.run(debug=True)
