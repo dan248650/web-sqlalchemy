@@ -1,0 +1,82 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="work-log-container">
+    <h2>Журнал работ</h2>
+    
+    {% for job in jobs %}
+    <div class="job-section" style="margin-bottom: 30px;">
+        <h3 style="text-align: left; margin-bottom: 15px; color: #111aaa;">Работа #{{ job.id }}</h3>
+        
+        <table class="table table-bordered table-hover" style="background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <thead style="background: linear-gradient(100deg, #111aaa 0%, #8888ee 100%); color: white;">
+                <tr>
+                    <th style="padding: 12px;">Название работы</th>
+                    <th style="padding: 12px;">Ответственный</th>
+                    <th style="padding: 12px;">Продолжительность (часы)</th>
+                    <th style="padding: 12px;">ID команды</th>
+                    <th style="padding: 12px;">Завершена</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 12px;">{{ job.job }}</td>
+                    <td style="padding: 12px;">{{ job.user.surname }} {{ job.user.name }}</td>
+                    <td style="padding: 12px;">{{ job.work_size }}</td>
+                    <td style="padding: 12px;">{{ job.collaborators }}</td>
+                    <td style="padding: 12px;">
+                        {% if job.is_finished %}
+                            <span style="color: #28a745; font-weight: bold;">Завершена</span>
+                        {% else %}
+                            <span style="color: #dc3545; font-weight: bold;">Не завершена</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info" style="text-align: center; padding: 20px; border-radius: 10px;">
+        <h4>Работ пока нет</h4>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    /* Дополнительные стили для таблиц */
+    .table {
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+    }
+
+    .table thead tr:first-child th:first-child {
+        border-top-left-radius: 10px;
+    }
+
+    .table thead tr:first-child th:last-child {
+        border-top-right-radius: 10px;
+    }
+
+    .table tbody tr:last-child td:first-child {
+        border-bottom-left-radius: 10px;
+    }
+
+    .table tbody tr:last-child td:last-child {
+        border-bottom-right-radius: 10px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(17, 26, 170, 0.05);
+        transition: background-color 0.4s ease;
+    }
+
+    h2 {
+        color: #111aaa;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #c1440e;
+    }
+</style>
+{% endblock %}

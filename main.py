@@ -113,11 +113,6 @@ def add_first_job():
 register_all_blueprints(app)
 
 
-@app.route('/', methods=['GET', 'POST'])
-def init():
-    return render_template('layouts/base.html')
-
-
 if __name__ == '__main__':
     with app.app_context():
         add_sample_users()
