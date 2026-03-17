@@ -54,7 +54,7 @@ def get_chief_and_middle_colonists():
     """
     db_sess = create_session()
 
-    colonists = db_sess.query(Jobs).filter(
+    colonists = db_sess.query(User).filter(
         User.position.contains('chief') |
         User.position.contains('middle')
     ).all()
