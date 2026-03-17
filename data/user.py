@@ -3,6 +3,7 @@ from sqlalchemy import orm
 from data.db_session import SqlAlchemyBase
 from werkzeug.security import generate_password_hash, check_password_hash
 from data.associations import user_role
+from datetime import datetime
 
 
 class User(SqlAlchemyBase):
@@ -17,7 +18,7 @@ class User(SqlAlchemyBase):
     address = sqlalchemy.Column(sqlalchemy.String)
     email = sqlalchemy.Column(sqlalchemy.String, unique=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
-    modified_date = sqlalchemy.Column(sqlalchemy.DateTime)
+    modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.now)
 
     fs_uniquifier = sqlalchemy.Column(sqlalchemy.String, unique=True)
 

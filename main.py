@@ -113,6 +113,16 @@ def add_first_job():
 register_all_blueprints(app)
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('errors/error.html', error="Страница не найдена"), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('errors/error.html', error="Внутренняя ошибка сервера"), 500
+
+
 if __name__ == '__main__':
     with app.app_context():
         add_sample_users()

@@ -1,0 +1,132 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="register-container">
+    <h1>Регистрация</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.email.label }}<br>
+            {{ form.email(class="form-control", type="email") }}<br>
+            {% for error in form.email.errors %}
+                <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.password.label }}<br>
+            {{ form.password(class="form-control", type="password") }}<br>
+            {% for error in form.password.errors %}
+                <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.password_again.label }}<br>
+            {{ form.password_again(class="form-control", type="password") }}<br>
+            {% for error in form.password_again.errors %}
+                <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.surname.label }}<br>
+            {{ form.surname(class="form-control") }}<br>
+            {% for error in form.surname.errors %}
+                <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.name.label }}<br>
+            {{ form.name(class="form-control") }}<br>
+            {% for error in form.name.errors %}
+                <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.age.label }}<br>
+            {{ form.age(class="form-control", type="number") }}<br>
+            {% for error in form.age.errors %}
+                <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.position.label }}<br>
+            {{ form.position(class="form-control") }}<br>
+            {% for error in form.position.errors %}
+                <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.speciality.label }}<br>
+            {{ form.speciality(class="form-control") }}<br>
+            {% for error in form.speciality.errors %}
+                <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.address.label }}<br>
+            {{ form.address(class="form-control") }}<br>
+            {% for error in form.address.errors %}
+                <p class="alert alert-danger" role="alert">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+
+        {% if message %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endif %}
+    </form>
+</div>
+
+<style>
+    .register-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(100deg, #111aaa 0%, #8888ee 100%);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        transform: scale(1.05);
+        transition: transform 0.3s;
+    }
+
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 10px;
+        border-radius: 4px;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}

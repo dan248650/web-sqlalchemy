@@ -1,0 +1,16 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="error-container text-center">
+    <div class="alert" role="alert">
+        <h3 class="alert-heading mb-3">Ошибка</h3>
+        <p class="mb-0">{{ error }}</p>
+    </div>
+    
+    <div class="mt-4">
+        <a href="{{ url_for('logs_bp.work_log') }}" class="btn btn-primary">
+            Вернуться на главную
+        </a>
+    </div>
+</div>
+{% endblock %}
