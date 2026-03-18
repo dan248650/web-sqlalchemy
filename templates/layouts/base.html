@@ -17,16 +17,18 @@
             <div class="header-content">
                 <div class="logo-title">
                     <h1>Миссия Колонизация Марса</h1>
-                    <span class="mars-one-label">Mars One</span>
+                    <a href="/">
+                        <span class="mars-one-label">Mars One</span>
+                    </a>
                 </div>
 
                 <div class="user-section">
                     {% if current_user.is_authenticated %}
                         <div class="user-menu">
                             <div class="user-menu">
-                                <a href="/add_job" class="btn-add-job">+ Добавить работу</a>
-                                <a href="/logout">
-                                    <span class="user-name">{{ current_user.surname }} {{ current_user.name }}</span>
+                                <a href="/add_job" class="action">+ Добавить работу</a>
+                                <a href="/logout" class="user-name">
+                                    {{ current_user.surname }} {{ current_user.name }}
                                 </a>
                                 <a href="/logout" class="btn-logout">Выйти</a>
                             </div>

@@ -195,7 +195,15 @@ main {
     gap: 15px;
 }
 
-.user-name {
+.user-menu a {
+    text-decoration: none;
+}
+
+.logo-title a {
+    text-decoration: none;
+}
+
+.user-name, .action {
     font-weight: 600;
     color: #111aaa;
     background: rgba(17, 26, 170, 0.1);
