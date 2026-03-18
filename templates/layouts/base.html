@@ -23,10 +23,13 @@
                 <div class="user-section">
                     {% if current_user.is_authenticated %}
                         <div class="user-menu">
-                            <a href="/logout">
-                                <span class="user-name">{{ current_user.surname }} {{ current_user.name }}</span>
-                            </a>
-                            <a href="/logout" class="btn-logout">Выйти</a>
+                            <div class="user-menu">
+                                <a href="/add_job" class="btn-add-job">+ Добавить работу</a>
+                                <a href="/logout">
+                                    <span class="user-name">{{ current_user.surname }} {{ current_user.name }}</span>
+                                </a>
+                                <a href="/logout" class="btn-logout">Выйти</a>
+                            </div>
                         </div>
                     {% else %}
                         <div class="auth-buttons">

@@ -1,6 +1,5 @@
 from flask import Flask, redirect, flash
 from flask_security import Security, SQLAlchemyUserDatastore, current_user
-from flask_sqlalchemy import SQLAlchemy
 import os
 import uuid
 from functools import wraps
@@ -103,3 +102,13 @@ init_database()
 @app.context_processor
 def inject_user():
     return dict(current_user=current_user)
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated:
+            flash('Необходимо войти в систему', 'warning')
+            return redirect('/login')
+        return f(*args, **kwargs)
+    return decorated_function
