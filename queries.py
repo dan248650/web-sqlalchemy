@@ -1,4 +1,4 @@
-from data.db_session import global_init, create_session
+from data.db import db
 from data.__all_models import User, Jobs, Department
 
 
@@ -6,9 +6,7 @@ def get_colonists_from_module1():
     """
     Подключается к базе данных и выводит всех колонистов из первого модуля
     """
-    db_sess = create_session()
-
-    colonists = db_sess.query(User).filter(User.address == 'module_1').all()
+    colonists = db.session.query(User).filter(User.address == 'module_1').all()
 
     print(*colonists, sep='\n')
 
@@ -20,9 +18,7 @@ def get_not_engineers_from_module1():
     Подключается к базе данных и выводит id колонистов из первого модуля,
     у которых ни speciality, ни position не содержат подстроку 'engineer'
     """
-    db_sess = create_session()
-
-    colonists_ids = db_sess.query(User.id).filter(
+    colonists_ids = db.session.query(User.id).filter(
         User.address == 'module_1',
         ~User.speciality.contains('engineer'),
         ~User.position.contains('engineer')
@@ -38,9 +34,7 @@ def get_minor_colonists():
     Подключается к базе данных и выводит несовершеннолетних
     колонистов с указанием возраста
     """
-    db_sess = create_session()
-
-    colonists = db_sess.query(User).filter(User.age < 18).all()
+    colonists = db.session.query(User).filter(User.age < 18).all()
 
     [print(colonist, colonist.age, "years") for colonist in colonists]
 
@@ -52,9 +46,7 @@ def get_chief_and_middle_colonists():
     Подключается к базе данных и выводит колонистов,
     у которых в названии должности (position) есть chief или middle
     """
-    db_sess = create_session()
-
-    colonists = db_sess.query(User).filter(
+    colonists = db.session.query(User).filter(
         User.position.contains('chief') |
         User.position.contains('middle')
     ).all()
@@ -69,9 +61,7 @@ def get_filtered_jobs():
     Подключается к базе данных и выводит актуальные работы,
     выполнение которых требует меньше 20 часов
     """
-    db_sess = create_session()
-
-    jobs = db_sess.query(Jobs).filter(
+    jobs = db.session.query(Jobs).filter(
         Jobs.work_size < 20,
         ~Jobs.is_finished
     ).all()
@@ -86,9 +76,7 @@ def get_team_leaders_of_largest_teams():
     Подключается к базе данных и выводит фамилии и имена тимлидов работ,
     которые выполняются наибольшими командами
     """
-    db_sess = create_session()
-
-    all_jobs = db_sess.query(Jobs).all()
+    all_jobs = db.session.query(Jobs).all()
 
     max_size = 0
     for job in all_jobs:
@@ -108,7 +96,7 @@ def get_team_leaders_of_largest_teams():
 
     selected_leaders = []
     for job in jobs_with_max_team:
-        team_leader = db_sess.query(User).filter(User.id == job.team_leader).first()
+        team_leader = db.session.query(User).filter(User.id == job.team_leader).first()
         if team_leader:
             selected_leaders.append(f"{team_leader.name} {team_leader.surname}")
 
@@ -122,9 +110,7 @@ def update_address_for_young_colonists():
     Подключается к базе данных и изменяет адрес на 'module_3' для всех колонистов,
     проживающих в module_1 и имеющих возраст менее 21 года
     """
-    db_sess = create_session()
-
-    colonists_to_update = db_sess.query(User).filter(
+    colonists_to_update = db.session.query(User).filter(
         User.address == 'module_1',
         User.age < 21
     ).all()
@@ -132,7 +118,7 @@ def update_address_for_young_colonists():
     for colonist in colonists_to_update:
         colonist.address = 'module_3'
 
-    db_sess.commit()
+    db.session.commit()
 
     return colonists_to_update
 
@@ -142,9 +128,7 @@ def get_department_workers_with_hours():
     Подключается к базе данных и выводит фамилии и имена работников департамента id=1,
     у которых суммарное количество отработанных часов больше 25
     """
-    db_sess = create_session()
-
-    department = db_sess.query(Department).filter(Department.id == 1).first()
+    department = db.session.query(Department).filter(Department.id == 1).first()
 
     workers = department.members
 
@@ -158,7 +142,7 @@ def get_department_workers_with_hours():
                 job_ids.add(job.id)
                 total_hours += job.work_size
 
-        all_jobs = db_sess.query(Jobs).all()
+        all_jobs = db.session.query(Jobs).all()
         for job in all_jobs:
             if job.collaborators:
                 collab_ids = [int(id.strip()) for id in job.collaborators.split(',')]
@@ -174,7 +158,7 @@ def get_department_workers_with_hours():
 
 
 if __name__ == '__main__':
-    db_name = input().strip()
-    global_init(db_name)
+    from configs.configs import app
 
-    pass
+    with app.app_context():
+        get_colonists_from_module1()

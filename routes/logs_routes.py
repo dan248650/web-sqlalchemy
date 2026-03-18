@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 
 from data.__all_models import User, Jobs
-from data.db_session import create_session
+from data.db import db
 
 
 logs_bp = Blueprint('logs_bp', __name__, template_folder='templates')
@@ -9,7 +9,7 @@ logs_bp = Blueprint('logs_bp', __name__, template_folder='templates')
 
 @logs_bp.route('/')
 def work_log():
-    db_sess = create_session()
+    db_sess = db.session
 
     jobs = db_sess.query(Jobs)
 

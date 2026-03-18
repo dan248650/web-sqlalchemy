@@ -4,14 +4,14 @@ import datetime
 
 from routes.routes import register_all_blueprints
 from configs.configs import app
-from data.db_session import create_session
+from data.db import db
 from data.__all_models import User, Jobs, Department
 
 
 def add_sample_users():
-    db_sess = create_session()
+    db_sess = db.session
 
-    if db_sess.query(User).first() is not None:
+    if db_sess.query(User).filter(User.email != 'admin@mars.org').first() is not None:
         print("Пользователи уже существуют в базе данных")
         return
 
@@ -25,7 +25,7 @@ def add_sample_users():
         email='scott_chief@mars.org',
         modified_date=datetime.datetime.now()
     )
-    captain.hashed_password = 'capitan_password'  # Пока без хэшей
+    captain.set_password('capitan_password')
 
     colonist1 = User(
         surname='Taylor',
@@ -37,7 +37,7 @@ def add_sample_users():
         email='robert.taylor@mars.org',
         modified_date=datetime.datetime.now()
     )
-    colonist1.hashed_password = 'taylor_password'
+    colonist1.set_password('taylor_password')
 
     colonist2 = User(
         surname='Jones',
@@ -49,7 +49,7 @@ def add_sample_users():
         email='william.jones@mars.org',
         modified_date=datetime.datetime.now()
     )
-    colonist2.hashed_password = 'jones_password'
+    colonist2.set_password('jones_password')
 
     colonist3 = User(
         surname='Harrington',
@@ -61,7 +61,7 @@ def add_sample_users():
         email='arthur.harrington@mars.org',
         modified_date=datetime.datetime.now()
     )
-    colonist3.hashed_password = 'harrington_password'
+    colonist3.set_password('harrington_password')
 
     colonist4 = User(
         surname='Frost',
@@ -73,18 +73,14 @@ def add_sample_users():
         email='jack.frost@mars.org',
         modified_date=datetime.datetime.now()
     )
-    colonist4.hashed_password = 'frost_password'
+    colonist4.set_password('frost_password')
 
-    db_sess.add(captain)
-    db_sess.add(colonist1)
-    db_sess.add(colonist2)
-    db_sess.add(colonist3)
-    db_sess.add(colonist4)
+    db_sess.add_all([captain, colonist1, colonist2, colonist3, colonist4])
     db_sess.commit()
 
 
 def add_first_job():
-    db_sess = create_session()
+    db_sess = db.session
 
     if db_sess.query(Jobs).first() is not None:
         print("Работы уже существуют в базе данных")
@@ -101,7 +97,7 @@ def add_first_job():
         job='deployment of residential modules 1 and 2',
         work_size=15,
         collaborators="2, 3",
-        start_date=datetime.date.today(),
+        start_date=datetime.datetime.now(),
         end_date=None,
         is_finished=False
     )
@@ -111,7 +107,7 @@ def add_first_job():
 
 
 def add_sample_departments():
-    db_sess = create_session()
+    db_sess = db.session
 
     if db_sess.query(Department).first() is not None:
         print("Департаменты уже существуют в базе данных")

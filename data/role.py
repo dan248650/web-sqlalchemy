@@ -1,10 +1,11 @@
 import sqlalchemy
 from sqlalchemy import orm
-from data.db_session import SqlAlchemyBase
+from data.db import db
 from data.associations import user_role
+from flask_security import RoleMixin
 
 
-class Role(SqlAlchemyBase):
+class Role(db.Model, RoleMixin):
     __tablename__ = 'roles'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True, nullable=False)

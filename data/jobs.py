@@ -1,9 +1,9 @@
 import sqlalchemy
 from sqlalchemy import orm
-from data.db_session import SqlAlchemyBase
+from data.db import db
 
 
-class Jobs(SqlAlchemyBase):
+class Jobs(db.Model):
     __tablename__ = 'jobs'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

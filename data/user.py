@@ -1,12 +1,13 @@
 import sqlalchemy
 from sqlalchemy import orm
-from data.db_session import SqlAlchemyBase
+from data.db import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from data.associations import user_role, department_members
 from datetime import datetime
+from flask_security import UserMixin
 
 
-class User(SqlAlchemyBase):
+class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -19,6 +20,7 @@ class User(SqlAlchemyBase):
     email = sqlalchemy.Column(sqlalchemy.String, unique=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.now)
+    active = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
 
     fs_uniquifier = sqlalchemy.Column(sqlalchemy.String, unique=True)
 

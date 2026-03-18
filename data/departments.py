@@ -1,10 +1,10 @@
 import sqlalchemy
 from sqlalchemy import orm
-from data.db_session import SqlAlchemyBase
+from data.db import db
 from data.associations import department_members
 
 
-class Department(SqlAlchemyBase):
+class Department(db.Model):
     __tablename__ = 'departments'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

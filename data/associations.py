@@ -1,16 +1,13 @@
-import sqlalchemy
-from data.db_session import SqlAlchemyBase
+from data.db import db
 
-user_role = sqlalchemy.Table(
-    'user_role',
-    SqlAlchemyBase.metadata,
-    sqlalchemy.Column('user_id', sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id')),
-    sqlalchemy.Column('role_id', sqlalchemy.Integer, sqlalchemy.ForeignKey('roles.id'))
+
+user_role = db.Table('user_role',
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('role_id', db.Integer, db.ForeignKey('roles.id'))
 )
 
-department_members = sqlalchemy.Table(
-    'department_members',
-    SqlAlchemyBase.metadata,
-    sqlalchemy.Column('department_id', sqlalchemy.Integer, sqlalchemy.ForeignKey('departments.id')),
-    sqlalchemy.Column('user_id', sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'))
+
+department_members = db.Table('department_members',
+    db.Column('department_id', db.Integer, db.ForeignKey('departments.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'))
 )
