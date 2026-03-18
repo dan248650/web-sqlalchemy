@@ -6,31 +6,86 @@
     <title>{{ title }}</title>
 
     <link rel="stylesheet"
-                          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-                          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-                          crossorigin="anonymous">
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container-custom">
         <header class="header-section">
-            <div class="row align-items-center">
-                <div class="col-9">
+            <div class="header-content">
+                <div class="logo-title">
                     <h1>Миссия Колонизация Марса</h1>
-                </div>
-                <div class="col-3 text-end">
                     <span class="mars-one-label">Mars One</span>
                 </div>
+
+                <div class="user-section">
+                    {% if current_user.is_authenticated %}
+                        <div class="user-menu">
+                            <a href="/logout">
+                                <span class="user-name">{{ current_user.surname }} {{ current_user.name }}</span>
+                            </a>
+                            <a href="/logout" class="btn-logout">Выйти</a>
+                        </div>
+                    {% else %}
+                        <div class="auth-buttons">
+                            <a href="/login" class="btn-login-small">Войти</a>
+                            <a href="/register" class="btn-register-small">Регистрация</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="motto">
+                <h4>И на Марсе будут яблони цвести!</h4>
             </div>
         </header>
 
         <main>
-            <div class="motto">
-                <h4>И на Марсе будут яблони цвести!</h4>
-            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category if category else 'info' }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
             {% block content %}
             {% endblock %}
         </main>
+
+        <footer class="footer-section">
+            <p>Mars Colonization Project</p>
+        </footer>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+
+    <script>
+        setTimeout(function() {
+            var alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                setTimeout(function() {
+                    bsAlert.close();
+                }, 100);
+            });
+        }, 5000);
+    </script>
 </body>
 </html>
