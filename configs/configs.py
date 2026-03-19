@@ -64,7 +64,7 @@ security = Security(app, user_datastore, register_blueprint=False)
 def init_database():
     with app.app_context():
         try:
-            roles = ['admin', 'user']
+            roles = ['admin', 'captain', 'user']
             for role_name in roles:
                 role = db.session.query(Role).filter_by(name=role_name).first()
                 if not role:

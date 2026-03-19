@@ -6,7 +6,24 @@
     
     {% for job in jobs %}
     <div class="job-section">
-        <h3>Работа #{{ job.id }}</h3>
+        <div class="job-header">
+            <h3>Работа #{{ job.id }}</h3>
+
+            {% if current_user.is_authenticated and current_user.can_edit_job(job) %}
+                <div class="job-actions">
+                    <a href="/edit_job/{{ job.id }}" class="btn-icon btn-edit" title="Редактировать">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <form action="/delete_job/{{ job.id }}" method="post" style="display: inline;">
+                        <button type="submit" class="btn-icon btn-delete"
+                                onclick="return confirm('Вы уверены, что хотите удалить эту работу?')"
+                                title="Удалить">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
 
         <div class="table-responsive">
             <table class="table">

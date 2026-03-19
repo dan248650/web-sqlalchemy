@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from data.associations import user_role, department_members
 from datetime import datetime
 from flask_security import UserMixin
+from sqlalchemy import event
 
 
 class User(db.Model, UserMixin):
@@ -44,3 +45,35 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
+
+    def is_captain(self):
+        return any(role.name == 'captain' for role in self.roles)
+
+    def is_admin(self):
+        return any(role.name == 'admin' for role in self.roles)
+
+    def can_edit_job(self, job):
+        if self.is_admin():
+            return True
+        if self.is_captain():
+            return True
+        if job.team_leader == self.id:
+            return True
+        return False
+
+
+@event.listens_for(User, 'after_insert')
+def add_default_role(mapper, connection, target):
+    from data.__all_models import Role
+
+    role = connection.execute(
+        Role.__table__.select().where(Role.name == 'user')
+    ).first()
+
+    if role:
+        connection.execute(
+            user_role.insert().values(
+                user_id=target.id,
+                role_id=role.id
+            )
+        )

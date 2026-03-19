@@ -2,10 +2,14 @@
 
 {% block content %}
 <div class="add-job-container">
-    <h1>Добавление работы</h1>
-    
+    <h1>{{ title }}</h1>
+
     <form action="" method="post">
         {{ form.hidden_tag() }}
+
+        {% if action == 'edit' %}
+            <input type="hidden" name="job_id" value="{{ job_id }}">
+        {% endif %}
         
         <div class="form-group">
             {{ form.job.label }}

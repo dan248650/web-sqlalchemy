@@ -403,6 +403,71 @@ main {
     background: #f8f9fa;
 }
 
+.job-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.job-header h3 {
+    margin: 0;
+    color: #111aaa;
+}
+
+.job-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    min-width: 120px;
+}
+
+.btn-delete, .btn-edit {
+    color: white;
+}
+
+.btn-delete {
+    background: linear-gradient(100deg, #dc3545 0%, #ff6b7c 100%);
+}
+
+.btn-edit {
+    background: linear-gradient(100deg, #111aaa 0%, #8888ee 100%);
+}
+
+.btn-edit:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.btn-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+    .job-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
 @media (max-width: 992px) {
     .container-custom {
         width: 95%;
