@@ -1,0 +1,59 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="add-container">
+    <h1>{{ title }}</h1>
+
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+
+        {% if action == 'edit' %}
+            <input type="hidden" name="department_id" value="{{ department_id }}">
+        {% endif %}
+        
+        <div class="form-group">
+            {{ form.title.label }}
+            {{ form.title(class="form-control", placeholder="Введите название департамента") }}
+            {% for error in form.title.errors %}
+                <p class="alert alert-danger">{{ error }}</p>
+            {% endfor %}
+        </div>
+        
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ form.chief.label }}
+                {{ form.chief(class="form-control", placeholder="ID главы департамента") }}
+                {% for error in form.chief.errors %}
+                    <p class="alert alert-danger">{{ error }}</p>
+                {% endfor %}
+            </div>
+            
+            <div class="form-group col-md-6">
+                {{ form.email.label }}
+                {{ form.email(class="form-control", placeholder="Email департамента") }}
+                {% for error in form.email.errors %}
+                    <p class="alert alert-danger">{{ error }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            {{ form.members.label }}
+            {{ form.members(class="form-control", size=8) }}
+            {% for error in form.members.errors %}
+                <p class="alert alert-danger">{{ error }}</p>
+            {% endfor %}
+            <small class="form-text text-muted">Выберите участников (зажмите Ctrl для множественного выбора)</small>
+        </div>
+        
+        <div class="form-group" style="display: flex; gap: 10px;">
+            {{ form.submit(class="btn-submit") }}
+            <a href="{{ return_url if return_url else '/departments' }}" class="btn-cancel">Отмена</a>
+        </div>
+        
+        {% if message %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}
