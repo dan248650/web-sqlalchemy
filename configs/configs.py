@@ -7,7 +7,7 @@ from locale import setlocale, Error, LC_ALL
 
 
 from data.db import db
-from data.__all_models import User, Role
+from data.__all_models import User, Role, Category
 from utils.generation_password import generate_password_for_user
 
 
@@ -70,6 +70,26 @@ def init_database():
                 if not role:
                     role = Role(name=role_name)
                     db.session.add(role)
+
+            db.session.commit()
+
+            categories = [
+                {'name': 'life_support', 'description': 'Обеспечение жизнедеятельности'},
+                {'name': 'research', 'description': 'Научные исследования'},
+                {'name': 'construction', 'description': 'Строительство и монтаж'},
+                {'name': 'terraforming', 'description': 'Терраформирование'},
+                {'name': 'maintenance', 'description': 'Техническое обслуживание'},
+                {'name': 'emergency', 'description': 'Аварийные работы'}
+            ]
+
+            for cat_data in categories:
+                category = db.session.query(Category).filter_by(name=cat_data['name']).first()
+                if not category:
+                    category = Category(
+                        name=cat_data['name'],
+                        description=cat_data['description']
+                    )
+                    db.session.add(category)
 
             db.session.commit()
 

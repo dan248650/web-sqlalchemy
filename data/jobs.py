@@ -1,6 +1,7 @@
 import sqlalchemy
 from sqlalchemy import orm
 from data.db import db
+from data.associations import job_category
 
 
 class Jobs(db.Model):
@@ -19,3 +20,9 @@ class Jobs(db.Model):
 
     team_leader = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
     user = orm.relationship('User', back_populates='jobs')
+
+    categories = orm.relationship(
+        'Category',
+        secondary='job_category',
+        back_populates='jobs'
+    )

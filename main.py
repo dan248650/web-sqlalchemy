@@ -5,7 +5,7 @@ import datetime
 from routes.routes import register_all_blueprints
 from configs.configs import app
 from data.db import db
-from data.__all_models import User, Jobs, Department, Role
+from data.__all_models import User, Jobs, Department, Role, Category
 import uuid
 
 
@@ -103,6 +103,13 @@ def add_sample_jobs():
         print("Не все пользователи найдены в базе данных")
         return
 
+    life_support = db_sess.query(Category).filter_by(name='life_support').first()
+    research = db_sess.query(Category).filter_by(name='research').first()
+    construction = db_sess.query(Category).filter_by(name='construction').first()
+    terraforming = db_sess.query(Category).filter_by(name='terraforming').first()
+    maintenance = db_sess.query(Category).filter_by(name='maintenance').first()
+    emergency = db_sess.query(Category).filter_by(name='emergency').first()
+
     jobs = [
         Jobs(
             team_leader=scott.id,
@@ -111,7 +118,8 @@ def add_sample_jobs():
             collaborators=f"{taylor.id}, {jones.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(days=5),
             end_date=datetime.datetime.now() - datetime.timedelta(days=2),
-            is_finished=True
+            is_finished=True,
+            categories=[construction, life_support]
         ),
         Jobs(
             team_leader=scott.id,
@@ -120,7 +128,8 @@ def add_sample_jobs():
             collaborators=f"{harrington.id}, {frost.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(days=3),
             end_date=None,
-            is_finished=False
+            is_finished=False,
+            categories=[life_support, construction]
         ),
         Jobs(
             team_leader=taylor.id,
@@ -129,7 +138,8 @@ def add_sample_jobs():
             collaborators=f"{jones.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(days=1),
             end_date=datetime.datetime.now(),
-            is_finished=True
+            is_finished=True,
+            categories=[research]
         ),
         Jobs(
             team_leader=jones.id,
@@ -138,7 +148,8 @@ def add_sample_jobs():
             collaborators=f"{taylor.id}, {frost.id}",
             start_date=datetime.datetime.now(),
             end_date=None,
-            is_finished=False
+            is_finished=False,
+            categories=[maintenance]
         ),
         Jobs(
             team_leader=harrington.id,
@@ -147,7 +158,8 @@ def add_sample_jobs():
             collaborators=f"{taylor.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(days=10),
             end_date=datetime.datetime.now() - datetime.timedelta(days=1),
-            is_finished=True
+            is_finished=True,
+            categories=[research, terraforming]
         ),
         Jobs(
             team_leader=frost.id,
@@ -156,7 +168,8 @@ def add_sample_jobs():
             collaborators=f"{jones.id}, {harrington.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(days=2),
             end_date=None,
-            is_finished=False
+            is_finished=False,
+            categories=[research]
         ),
         Jobs(
             team_leader=scott.id,
@@ -165,7 +178,8 @@ def add_sample_jobs():
             collaborators=f"{taylor.id}, {jones.id}, {harrington.id}, {frost.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(hours=6),
             end_date=datetime.datetime.now() - datetime.timedelta(hours=1),
-            is_finished=True
+            is_finished=True,
+            categories=[emergency]
         ),
     ]
 
