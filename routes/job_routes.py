@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, flash, request, abort
 from configs.configs import login_required
 from data.db import db
-from data.__all_models import Jobs, User
+from data.__all_models import Jobs, User, Category
 from forms.job import JobForm
 import datetime
 from flask_security import current_user
@@ -22,7 +22,8 @@ def add_job():
                                    title='Добавление работы',
                                    form=form,
                                    message='Тимлид с таким ID не найден',
-                                   action='add')
+                                   action='add',
+                                   return_url='/')
 
         job = Jobs(
             job=form.job.data,
@@ -33,6 +34,11 @@ def add_job():
             is_finished=form.is_finished.data
         )
 
+        selected_categories = db.session.query(Category).filter(
+            Category.id.in_(form.categories.data)
+        ).all()
+        job.categories = selected_categories
+
         db.session.add(job)
         db.session.commit()
 
@@ -42,7 +48,8 @@ def add_job():
     return render_template('jobs/job.html',
                            title='Добавление работы',
                            form=form,
-                           action='add')
+                           action='add',
+                           return_url='/')
 
 
 @job_bp.route('/edit_job/<int:id>', methods=['GET', 'POST'])
@@ -64,6 +71,7 @@ def edit_job(id):
         form.work_size.data = job.work_size
         form.collaborators.data = job.collaborators
         form.is_finished.data = job.is_finished
+        form.categories.data = [cat.id for cat in job.categories]
 
     if form.validate_on_submit():
         team_leader = db.session.query(User).get(form.team_leader.data)
@@ -73,13 +81,19 @@ def edit_job(id):
                                    form=form,
                                    message='Тимлид с таким ID не найден',
                                    action='edit',
-                                   job_id=id)
+                                   job_id=id,
+                                   return_url='/')
 
         job.job = form.job.data
         job.team_leader = form.team_leader.data
         job.work_size = form.work_size.data
         job.collaborators = form.collaborators.data
         job.is_finished = form.is_finished.data
+
+        selected_categories = db.session.query(Category).filter(
+            Category.id.in_(form.categories.data)
+        ).all()
+        job.categories = selected_categories
 
         db.session.commit()
 
@@ -90,10 +104,11 @@ def edit_job(id):
                            title='Редактирование работы',
                            form=form,
                            action='edit',
-                           job_id=id)
+                           job_id=id,
+                           return_url='/')
 
 
-@job_bp.route('/delete_job/<int:id>', methods=['POST'])
+@job_bp.route('/delete_job/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_job(id):
     job = db.session.query(Jobs).get(id)

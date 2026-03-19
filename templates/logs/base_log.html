@@ -1,0 +1,61 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="log-container">
+    <div class="log-header">
+        <h2>{{ log_title }}</h2>
+
+        {% if current_user.is_authenticated and can_add %}
+            <a href="{{ add_url }}" class="btn-add">
+                <i class="fas fa-plus"></i> {{ add_button_text }}
+            </a>
+        {% endif %}
+    </div>
+
+    {% for item in items %}
+    <div class="item-section">
+        <div class="item-header">
+            <h3>{{ item_title_prefix }} #{{ item.id }}</h3>
+
+            {% if current_user.is_authenticated and can_edit(item) %}
+                <div class="item-actions">
+                    <a href="{{ edit_url }}/{{ item.id }}" class="btn-icon btn-edit" title="Редактировать">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <form action="{{ delete_url }}/{{ item.id }}" method="post" style="display: inline;">
+                        <button type="submit" class="btn-icon btn-delete"
+                                onclick="return confirm('{{ delete_confirm_message }}')"
+                                title="Удалить">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        {% for header in table_headers %}
+                            <th>{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% for field in item_fields(item) %}
+                            <td>{{ field|safe }}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info empty-message">
+        <h4>{{ empty_message }}</h4>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

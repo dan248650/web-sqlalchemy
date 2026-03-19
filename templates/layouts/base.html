@@ -26,13 +26,31 @@
                 <div class="user-section">
                     {% if current_user.is_authenticated %}
                         <div class="user-menu">
-                            <div class="user-menu">
-                                <a href="/add_job" class="action">+ Добавить работу</a>
-                                <a href="/logout" class="user-name">
-                                    {{ current_user.surname }} {{ current_user.name }}
-                                </a>
-                                <a href="/logout" class="btn-logout">Выйти</a>
+                            <div class="dropdown journals-dropdown">
+                                <button class="dropdown-toggle" type="button" id="journalsDropdown"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-book-open"></i> Журналы
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="journalsDropdown">
+                                    <a class="dropdown-item" href="/">
+                                        <i class="fas fa-clipboard-list"></i> Журнал работ
+                                    </a>
+                                    <a class="dropdown-item" href="/departments">
+                                        <i class="fas fa-building"></i> Журнал департаментов
+                                    </a>
+                                    <a class="dropdown-item" href="/categories">
+                                        <i class="fas fa-chart-pie"></i> Журнал категорий
+                                    </a>
+                                    {% if current_user.is_admin() %}
+                                        <a class="dropdown-item" href="/users">
+                                            <i class="fas fa-users"></i> Журнал пользователей
+                                        </a>
+                                    {% endif %}
+                                </div>
                             </div>
+
+                            <a href="/logout" class="user-name">{{ current_user.surname }} {{ current_user.name }}</a>
+                            <a href="/logout" class="btn-logout">Выйти</a>
                         </div>
                     {% else %}
                         <div class="auth-buttons">
