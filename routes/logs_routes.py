@@ -22,7 +22,7 @@ LOG_CONFIGS = {
             job.job,
             f"{job.user.surname} {job.user.name}",
             str(job.work_size),
-            job.collaborators,
+            ', '.join([f"{u.surname} {u.name}" for u in job.collaborators]) or 'Нет участников',
             ', '.join([cat.name for cat in job.categories]) or 'Нет категорий',
             '<span style="color: #28a745; font-weight: bold;">Завершена</span>' if job.is_finished
             else '<span style="color: #dc3545; font-weight: bold;">Не завершена</span>'

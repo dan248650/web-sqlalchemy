@@ -39,10 +39,11 @@
         
         <div class="form-group">
             {{ form.collaborators.label }}
-            {{ form.collaborators(class="form-control", placeholder="Например: 1, 2, 3") }}
+            {{ form.collaborators(class="form-control", size=6) }}
             {% for error in form.collaborators.errors %}
                 <p class="alert alert-danger">{{ error }}</p>
             {% endfor %}
+            <small class="form-text text-muted">Выберите участников (зажмите Ctrl для множественного выбора)</small>
         </div>
 
         <div class="form-group">

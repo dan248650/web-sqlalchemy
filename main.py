@@ -115,7 +115,6 @@ def add_sample_jobs():
             team_leader=scott.id,
             job='Deployment of residential modules 1 and 2',
             work_size=15,
-            collaborators=f"{taylor.id}, {jones.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(days=5),
             end_date=datetime.datetime.now() - datetime.timedelta(days=2),
             is_finished=True,
@@ -125,7 +124,6 @@ def add_sample_jobs():
             team_leader=scott.id,
             job='Installation of life support systems',
             work_size=25,
-            collaborators=f"{harrington.id}, {frost.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(days=3),
             end_date=None,
             is_finished=False,
@@ -135,7 +133,6 @@ def add_sample_jobs():
             team_leader=taylor.id,
             job='Soil analysis in sector A-7',
             work_size=10,
-            collaborators=f"{jones.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(days=1),
             end_date=datetime.datetime.now(),
             is_finished=True,
@@ -145,7 +142,6 @@ def add_sample_jobs():
             team_leader=jones.id,
             job='Maintenance of communication antennas',
             work_size=8,
-            collaborators=f"{taylor.id}, {frost.id}",
             start_date=datetime.datetime.now(),
             end_date=None,
             is_finished=False,
@@ -155,7 +151,6 @@ def add_sample_jobs():
             team_leader=harrington.id,
             job='Greenhouse experiment: Martian soil cultivation',
             work_size=30,
-            collaborators=f"{taylor.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(days=10),
             end_date=datetime.datetime.now() - datetime.timedelta(days=1),
             is_finished=True,
@@ -165,7 +160,6 @@ def add_sample_jobs():
             team_leader=frost.id,
             job='Drone reconnaissance of landing zone',
             work_size=12,
-            collaborators=f"{jones.id}, {harrington.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(days=2),
             end_date=None,
             is_finished=False,
@@ -175,13 +169,20 @@ def add_sample_jobs():
             team_leader=scott.id,
             job='Emergency drill: pressure drop simulation',
             work_size=5,
-            collaborators=f"{taylor.id}, {jones.id}, {harrington.id}, {frost.id}",
             start_date=datetime.datetime.now() - datetime.timedelta(hours=6),
             end_date=datetime.datetime.now() - datetime.timedelta(hours=1),
             is_finished=True,
             categories=[emergency]
         ),
     ]
+
+    jobs[0].collaborators = [taylor, jones]
+    jobs[1].collaborators = [harrington, frost]
+    jobs[2].collaborators = [jones]
+    jobs[3].collaborators = [taylor, frost]
+    jobs[4].collaborators = [taylor]
+    jobs[5].collaborators = [jones, harrington]
+    jobs[6].collaborators = [taylor, jones, harrington, frost]
 
     db_sess.add_all(jobs)
     db_sess.commit()

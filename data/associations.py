@@ -17,3 +17,9 @@ job_category = db.Table('job_category',
     db.Column('job_id', db.Integer, db.ForeignKey('jobs.id'), primary_key=True),
     db.Column('category_id', db.Integer, db.ForeignKey('categories.id'), primary_key=True)
 )
+
+
+job_collaborators = db.Table('job_collaborators',
+    db.Column('job_id', db.Integer, db.ForeignKey('jobs.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
+)

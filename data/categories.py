@@ -16,3 +16,6 @@ class Category(db.Model):
         secondary='job_category',
         back_populates='categories'
     )
+
+    def __repr__(self):
+        return f'<Category {self.id}: {self.name}>'

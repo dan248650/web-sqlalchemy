@@ -12,3 +12,6 @@ class Role(db.Model, RoleMixin):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False, unique=True)
 
     users = orm.relationship('User', secondary='user_role', back_populates='roles')
+
+    def __repr__(self):
+        return f'<Role {self.id}: {self.name}>'

@@ -29,17 +29,20 @@ def add_job():
             job=form.job.data,
             team_leader=form.team_leader.data,
             work_size=form.work_size.data,
-            collaborators=form.collaborators.data,
             start_date=datetime.datetime.now(),
             is_finished=form.is_finished.data
         )
 
-        selected_categories = db.session.query(Category).filter(
-            Category.id.in_(form.categories.data)
-        ).all()
-        job.categories = selected_categories
-
         db.session.add(job)
+
+        if form.collaborators.data:
+            users = db.session.query(User).filter(User.id.in_(form.collaborators.data)).all()
+            job.collaborators = users
+
+        if form.categories.data:
+            selected_categories = db.session.query(Category).filter(Category.id.in_(form.categories.data)).all()
+            job.categories = selected_categories
+
         db.session.commit()
 
         flash('Работа успешно добавлена!', 'success')
@@ -69,8 +72,8 @@ def edit_job(id):
         form.job.data = job.job
         form.team_leader.data = job.team_leader
         form.work_size.data = job.work_size
-        form.collaborators.data = job.collaborators
         form.is_finished.data = job.is_finished
+        form.collaborators.data = [user.id for user in job.collaborators]
         form.categories.data = [cat.id for cat in job.categories]
 
     if form.validate_on_submit():
@@ -87,13 +90,19 @@ def edit_job(id):
         job.job = form.job.data
         job.team_leader = form.team_leader.data
         job.work_size = form.work_size.data
-        job.collaborators = form.collaborators.data
         job.is_finished = form.is_finished.data
 
-        selected_categories = db.session.query(Category).filter(
-            Category.id.in_(form.categories.data)
-        ).all()
-        job.categories = selected_categories
+        if form.collaborators.data:
+            users = db.session.query(User).filter(User.id.in_(form.collaborators.data)).all()
+            job.collaborators = users
+        else:
+            job.collaborators = []
+
+        if form.categories.data:
+            selected_categories = db.session.query(Category).filter(Category.id.in_(form.categories.data)).all()
+            job.categories = selected_categories
+        else:
+            job.categories = []
 
         db.session.commit()
 

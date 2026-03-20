@@ -43,11 +43,12 @@ def add_department():
             email=form.email.data
         )
 
+        db.session.add(department)
+
         if form.members.data:
             members = db.session.query(User).filter(User.id.in_(form.members.data)).all()
             department.members = members
 
-        db.session.add(department)
         db.session.commit()
 
         flash('Департамент успешно добавлен!', 'success')

@@ -2,7 +2,7 @@ import sqlalchemy
 from sqlalchemy import orm
 from data.db import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from data.associations import user_role, department_members
+from data.associations import user_role, department_members, job_collaborators
 from datetime import datetime
 from flask_security import UserMixin
 from sqlalchemy import event
@@ -40,6 +40,12 @@ class User(db.Model, UserMixin):
         back_populates='members'
     )
 
+    collaborating_jobs = orm.relationship(
+        'Jobs',
+        secondary='job_collaborators',
+        back_populates='collaborators'
+    )
+
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 
@@ -60,6 +66,9 @@ class User(db.Model, UserMixin):
         if job.team_leader == self.id:
             return True
         return False
+
+    def __repr__(self):
+        return f'<User {self.id}: {self.name} {self.surname}>'
 
 
 @event.listens_for(User, 'after_insert')
