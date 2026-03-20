@@ -11,6 +11,10 @@ class Role(db.Model, RoleMixin, SerializerMixin):
 
     serialize_rules = (
         '-users.roles',
+        '-users.jobs',
+        '-users.collaborating_jobs',
+        '-users.chief_of_departments',
+        '-users.member_of_departments',
     )
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True, nullable=False)

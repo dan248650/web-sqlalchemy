@@ -1,4 +1,4 @@
-from flask import redirect, render_template
+from flask import redirect, render_template, request, make_response, jsonify
 from pathlib import Path
 import datetime
 
@@ -234,12 +234,62 @@ register_all_blueprints(app)
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def not_found(error):
+    if request.path.startswith('/api/'):
+        return make_response(jsonify({
+            'error': 'Not Found',
+            'message': 'The requested resource was not found'
+        }), 404)
     return render_template('errors/error.html', error="Страница не найдена"), 404
 
 
+@app.errorhandler(400)
+def bad_request(error):
+    if request.path.startswith('/api/'):
+        return make_response(jsonify({
+            'error': 'Bad Request',
+            'message': str(error.description) if hasattr(error, 'description') else 'Invalid request'
+        }), 400)
+    return render_template('errors/error.html', error="Некорректный запрос"), 400
+
+
+@app.errorhandler(403)
+def forbidden(error):
+    if request.path.startswith('/api/'):
+        return make_response(jsonify({
+            'error': 'Forbidden',
+            'message': 'You do not have permission to access this resource'
+        }), 403)
+    return render_template('errors/error.html', error="Доступ запрещен"), 403
+
+
+@app.errorhandler(401)
+def unauthorized(error):
+    if request.path.startswith('/api/'):
+        return make_response(jsonify({
+            'error': 'Unauthorized',
+            'message': 'Authentication required'
+        }), 401)
+    return render_template('errors/error.html', error="Требуется авторизация"), 401
+
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    if request.path.startswith('/api/'):
+        return make_response(jsonify({
+            'error': 'Method Not Allowed',
+            'message': 'The method is not allowed for this endpoint'
+        }), 405)
+    return render_template('errors/error.html', error="Метод не разрешен"), 405
+
+
 @app.errorhandler(500)
-def internal_server_error(e):
+def internal_server_error(error):
+    if request.path.startswith('/api/'):
+        return make_response(jsonify({
+            'error': 'Internal Server Error',
+            'message': 'An internal error occurred'
+        }), 500)
     return render_template('errors/error.html', error="Внутренняя ошибка сервера"), 500
 
 

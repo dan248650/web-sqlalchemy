@@ -10,8 +10,16 @@ class Jobs(db.Model, SerializerMixin):
 
     serialize_rules = (
         '-user.jobs',
+        '-user.collaborating_jobs',
+        '-user.chief_of_departments',
+        '-user.member_of_departments',
+        '-user.roles',
+        '-collaborators.jobs',
         '-collaborators.collaborating_jobs',
-        '-categories.jobs'
+        '-collaborators.chief_of_departments',
+        '-collaborators.member_of_departments',
+        '-collaborators.roles',
+        '-categories.jobs',
     )
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

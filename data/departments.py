@@ -10,7 +10,15 @@ class Department(db.Model, SerializerMixin):
 
     serialize_rules = (
         '-chief_user.chief_of_departments',
-        '-members.member_of_departments'
+        '-chief_user.member_of_departments',
+        '-chief_user.jobs',
+        '-chief_user.collaborating_jobs',
+        '-chief_user.roles',
+        '-members.member_of_departments',
+        '-members.chief_of_departments',
+        '-members.jobs',
+        '-members.collaborating_jobs',
+        '-members.roles',
     )
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

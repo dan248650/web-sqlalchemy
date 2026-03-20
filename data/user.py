@@ -16,9 +16,16 @@ class User(db.Model, UserMixin, SerializerMixin):
         '-hashed_password',
         '-fs_uniquifier',
         '-jobs.user',
+        '-jobs.collaborators',
+        '-jobs.categories',
         '-collaborating_jobs.collaborators',
+        '-collaborating_jobs.user',
+        '-collaborating_jobs.categories',
         '-chief_of_departments.chief_user',
-        '-member_of_departments.members'
+        '-chief_of_departments.members',
+        '-member_of_departments.members',
+        '-member_of_departments.chief_user',
+        '-roles.users',
     )
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)

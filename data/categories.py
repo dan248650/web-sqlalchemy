@@ -10,6 +10,8 @@ class Category(db.Model, SerializerMixin):
 
     serialize_rules = (
         '-jobs.categories',
+        '-jobs.user',
+        '-jobs.collaborators',
     )
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
