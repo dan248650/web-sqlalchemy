@@ -2,10 +2,17 @@ import sqlalchemy
 from sqlalchemy import orm
 from data.db import db
 from data.associations import job_category, job_collaborators
+from sqlalchemy_serializer import SerializerMixin
 
 
-class Jobs(db.Model):
+class Jobs(db.Model, SerializerMixin):
     __tablename__ = 'jobs'
+
+    serialize_rules = (
+        '-user.jobs',
+        '-collaborators.collaborating_jobs',
+        '-categories.jobs'
+    )
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     job = sqlalchemy.Column(sqlalchemy.String)

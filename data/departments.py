@@ -2,10 +2,16 @@ import sqlalchemy
 from sqlalchemy import orm
 from data.db import db
 from data.associations import department_members
+from sqlalchemy_serializer import SerializerMixin
 
 
-class Department(db.Model):
+class Department(db.Model, SerializerMixin):
     __tablename__ = 'departments'
+
+    serialize_rules = (
+        '-chief_user.chief_of_departments',
+        '-members.member_of_departments'
+    )
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String, nullable=False)

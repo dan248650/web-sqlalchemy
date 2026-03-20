@@ -6,10 +6,20 @@ from data.associations import user_role, department_members, job_collaborators
 from datetime import datetime
 from flask_security import UserMixin
 from sqlalchemy import event
+from sqlalchemy_serializer import SerializerMixin
 
 
-class User(db.Model, UserMixin):
+class User(db.Model, UserMixin, SerializerMixin):
     __tablename__ = 'users'
+
+    serialize_rules = (
+        '-hashed_password',
+        '-fs_uniquifier',
+        '-jobs.user',
+        '-collaborating_jobs.collaborators',
+        '-chief_of_departments.chief_user',
+        '-member_of_departments.members'
+    )
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     surname = sqlalchemy.Column(sqlalchemy.String)

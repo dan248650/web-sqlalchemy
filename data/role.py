@@ -3,10 +3,15 @@ from sqlalchemy import orm
 from data.db import db
 from data.associations import user_role
 from flask_security import RoleMixin
+from sqlalchemy_serializer import SerializerMixin
 
 
-class Role(db.Model, RoleMixin):
+class Role(db.Model, RoleMixin, SerializerMixin):
     __tablename__ = 'roles'
+
+    serialize_rules = (
+        '-users.roles',
+    )
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True, nullable=False)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False, unique=True)
