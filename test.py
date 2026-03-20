@@ -15,7 +15,7 @@ def print_response(response, title):
 
 
 def test_get_all_jobs():
-    """Тест 1: Получение всех работ"""
+    """Получение всех работ"""
     print("\nТест 1: Получение всех работ")
     response = requests.get(f'{BASE_URL}/jobs')
 
@@ -28,26 +28,88 @@ def test_get_all_jobs():
     return response
 
 
-def test_get_valid_job(job_id=1):
-    """Тест 2: Корректное получение одной работы"""
-    print(f"\nТест 2: Получение работы с ID {job_id}")
-    response = requests.get(f'{BASE_URL}/jobs/{job_id}')
+def api_login(email, password):
+    """API авторизация"""
+    print(f"\nАвторизация: {email}")
+    response = requests.post(f'{BASE_URL}/login', json={
+        'email': email,
+        'password': password
+    })
+    print_response(response, f"POST /api/login")
 
     if response.status_code == 200:
         data = response.json()
-        job = data.get('job', {})
-        print(f"Успешно: Найдена работа '{job.get('job')}'")
+        print(f"Авторизация успешна! Пользователь: {data['user']['name']}")
+        return response.cookies
+    else:
+        print(f"Авторизация не удалась")
+        return None
+
+
+def test_add_job(cookies=None):
+    """Добавление работы (POST)"""
+    print("\nТест 6: Добавление новой работы")
+
+    new_job = {
+        "job": "Test Job from API",
+        "team_leader": 2,
+        "work_size": 10,
+        "collaborators": [3, 4],
+        "categories": [1, 2],
+        "is_finished": False
+    }
+
+    print(f"Отправляем данные: {json.dumps(new_job, indent=2, ensure_ascii=False)}")
+    response = requests.post(f'{BASE_URL}/jobs', json=new_job, cookies=cookies)
+    print_response(response, "POST /api/jobs")
+
+    if response.status_code == 201:
+        print(f"Успешно: Работа создана с ID {response.json().get('id')}")
+    elif response.status_code == 401:
+        print("Требуется авторизация")
     else:
         print(f"Ошибка: Статус {response.status_code}")
 
     return response
 
 
-def test_get_invalid_job_id():
-    """Тест 3: Error - неверный ID"""
-    print("\nТест 3: Получение работы с несуществующим ID")
-    invalid_id = 9999
-    response = requests.get(f'{BASE_URL}/jobs/{invalid_id}')
+def test_add_job_missing_fields(cookies=None):
+    """Добавление работы с отсутствующими обязательными полями"""
+    print("\nТест 7: Добавление работы без обязательных полей")
+
+    new_job = {
+        "job": "Test Job",
+        "is_finished": False
+    }
+
+    print(f"Отправляем данные: {json.dumps(new_job, indent=2, ensure_ascii=False)}")
+    response = requests.post(f'{BASE_URL}/jobs', json=new_job, cookies=cookies)
+    print_response(response, "POST /api/jobs (неполные данные)")
+
+    if response.status_code == 400:
+        data = response.json()
+        print(f"Успешно: Корректная ошибка 400")
+        print(f"   Сообщение: {data.get('error')} - {data.get('message')}")
+    else:
+        print(f"Ошибка: Ожидался статус 400, получен {response.status_code}")
+
+    return response
+
+
+def test_add_job_invalid_team_leader(cookies=None):
+    """Добавление работы с несуществующим тимлидом"""
+    print("\nТест 8: Добавление работы с несуществующим тимлидом")
+
+    new_job = {
+        "job": "Test Job",
+        "team_leader": 9999,
+        "work_size": 10,
+        "is_finished": False
+    }
+
+    print(f"Отправляем данные: {json.dumps(new_job, indent=2, ensure_ascii=False)}")
+    response = requests.post(f'{BASE_URL}/jobs', json=new_job, cookies=cookies)
+    print_response(response, "POST /api/jobs (неверный тимлид)")
 
     if response.status_code == 404:
         data = response.json()
@@ -59,34 +121,18 @@ def test_get_invalid_job_id():
     return response
 
 
-def test_get_invalid_job_string():
-    """Тест 4: Error - строка вместо ID"""
-    print("\nТест 4: Получение работы со строковым ID")
-    invalid_id = "abc"
-    response = requests.get(f'{BASE_URL}/jobs/{invalid_id}')
+def test_add_job_empty_request(cookies=None):
+    """Добавление работы с пустым телом запроса"""
+    print("\nТест 9: Добавление работы с пустым телом запроса")
+    response = requests.post(f'{BASE_URL}/jobs', json={}, cookies=cookies)
+    print_response(response, "POST /api/jobs (пустой запрос)")
 
-    if response.status_code == 404:
+    if response.status_code == 400:
         data = response.json()
-        print(f"Успешно: Корректная ошибка 404")
+        print(f"Успешно: Корректная ошибка 400")
         print(f"   Сообщение: {data.get('error')} - {data.get('message')}")
     else:
-        print(f"Ошибка: Ожидался статус 404, получен {response.status_code}")
-
-    return response
-
-
-def test_get_invalid_job_negative():
-    """Тест 5: Error - отрицательный ID"""
-    print("\nТест 5: Получение работы с отрицательным ID")
-    invalid_id = -1
-    response = requests.get(f'{BASE_URL}/jobs/{invalid_id}')
-
-    if response.status_code == 404:
-        data = response.json()
-        print(f"Успешно: Корректная ошибка 404 для отрицательного ID")
-        print(f"   Сообщение: {data.get('error')} - {data.get('message')}")
-    else:
-        print(f"Ошибка: Ожидался статус 404, получен {response.status_code}")
+        print(f"Ошибка: Ожидался статус 400, получен {response.status_code}")
 
     return response
 
@@ -99,11 +145,16 @@ def main():
         print("ОШИБКА: Сервер не доступен!")
         return
 
-    test_get_all_jobs()
-    test_get_valid_job(1)
-    test_get_invalid_job_id()
-    test_get_invalid_job_string()
-    test_get_invalid_job_negative()
+    cookies = api_login("admin@mars.org", password="WPUevGhB")
+
+    if cookies:
+        test_add_job(cookies)
+
+        test_add_job_missing_fields(cookies)
+        test_add_job_invalid_team_leader(cookies)
+        test_add_job_empty_request(cookies)
+    else:
+        print("Не удалось авторизоваться, тесты добавления работ пропущены")
 
 
 if __name__ == '__main__':
