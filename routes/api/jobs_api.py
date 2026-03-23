@@ -3,6 +3,7 @@ from routes.api import api_bp
 from data.db import db
 from data.__all_models import Jobs, Category, User
 from configs.configs import login_required
+from flask_security import current_user
 import datetime
 
 
@@ -66,3 +67,58 @@ def add_job():
     db.session.commit()
 
     return jsonify({'id': job.id, 'success': 'Job created'}), 201
+
+
+@api_bp.route('/jobs/<int:job_id>', methods=['PUT'])
+@login_required
+def update_job(job_id):
+    """Обновить работу"""
+    job = db.session.get(Jobs, job_id)
+    if not job:
+        return make_response(jsonify({'error': 'Job not found'}), 404)
+    if not current_user.can_edit_job(job):
+        return make_response(jsonify({'error': 'Permission denied'}), 403)
+    if not request.json:
+        return make_response(jsonify({'error': 'Empty request'}), 400)
+
+    if 'job' in request.json:
+        job.job = request.json['job']
+    if 'team_leader' in request.json:
+        team_leader = db.session.get(User, request.json['team_leader'])
+        if not team_leader:
+            return make_response(jsonify({'error': 'Team leader not found'}), 404)
+        job.team_leader = request.json['team_leader']
+    if 'work_size' in request.json:
+        job.work_size = request.json['work_size']
+    if 'is_finished' in request.json:
+        job.is_finished = request.json['is_finished']
+    if 'collaborators' in request.json:
+        users = db.session.query(User).filter(
+            User.id.in_(request.json['collaborators'])
+        ).all()
+        job.collaborators = users
+    if 'categories' in request.json:
+        categories = db.session.query(Category).filter(
+            Category.id.in_(request.json['categories'])
+        ).all()
+        job.categories = categories
+
+    db.session.commit()
+
+    return jsonify({'id': job.id, 'success': 'Job updated'}), 200
+
+
+@api_bp.route('/jobs/<int:job_id>', methods=['DELETE'])
+@login_required
+def delete_job(job_id):
+    """Удалить работу"""
+    job = db.session.get(Jobs, job_id)
+    if not job:
+        return make_response(jsonify({'error': 'Job not found'}), 404)
+    if not current_user.can_edit_job(job):
+        return make_response(jsonify({'error': 'Permission denied'}), 403)
+
+    db.session.delete(job)
+    db.session.commit()
+
+    return jsonify({'id': job_id, 'success': 'Job deleted'}), 200
