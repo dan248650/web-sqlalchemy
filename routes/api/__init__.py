@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, make_response
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
 from . import jobs_api
+from . import users_api
 from . import auth_api
 
 
