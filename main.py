@@ -24,6 +24,7 @@ def add_sample_users():
         speciality='research engineer',
         address='module_1',
         email='scott_chief@mars.org',
+        city_from='Houston, USA',
         fs_uniquifier=str(uuid.uuid4()),
         modified_date=datetime.datetime.now()
     )
@@ -39,6 +40,7 @@ def add_sample_users():
         speciality='astrobotanist',
         address='module_2',
         email='robert.taylor@mars.org',
+        city_from='London, UK',
         fs_uniquifier=str(uuid.uuid4()),
         modified_date=datetime.datetime.now()
     )
@@ -52,6 +54,7 @@ def add_sample_users():
         speciality='computer systems engineer',
         address='module_3',
         email='william.jones@mars.org',
+        city_from='Sydney, Australia',
         fs_uniquifier=str(uuid.uuid4()),
         modified_date=datetime.datetime.now()
     )
@@ -65,6 +68,7 @@ def add_sample_users():
         speciality='analytical chemist',
         address='module_1',
         email='arthur.harrington@mars.org',
+        city_from='Moscow, Russia',
         fs_uniquifier=str(uuid.uuid4()),
         modified_date=datetime.datetime.now()
     )
@@ -78,6 +82,7 @@ def add_sample_users():
         speciality='spacecraft pilot',
         address='module_2',
         email='jack.frost@mars.org',
+        city_from='Tokyo, Japan',
         fs_uniquifier=str(uuid.uuid4()),
         modified_date=datetime.datetime.now()
     )

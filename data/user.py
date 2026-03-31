@@ -39,6 +39,7 @@ class User(db.Model, UserMixin, SerializerMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.now)
     active = sqlalchemy.Column(sqlalchemy.Boolean, default=True)
+    city_from = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     fs_uniquifier = sqlalchemy.Column(sqlalchemy.String, unique=True)
 

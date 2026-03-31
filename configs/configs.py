@@ -49,7 +49,8 @@ app.config.update(
     SECURITY_REGISTERABLE=True,
     SECURITY_SEND_REGISTER_EMAIL=False,
     SECURITY_LOGIN_USER_TEMPLATE='auth/login.html',
-    SECURITY_REGISTER_USER_TEMPLATE='auth/register.html'
+    SECURITY_REGISTER_USER_TEMPLATE='auth/register.html',
+    YANDEX_MAPS_API_KEY='8013b162-6b42-4997-9691-77b7074026e0'
 )
 
 db.init_app(app)
@@ -102,6 +103,7 @@ def init_database():
 
                 admin_user = User(
                     email='admin@mars.org',
+                    city_from='Moscow, Russia',
                     fs_uniquifier=str(uuid.uuid4()),
                     active=True
                 )

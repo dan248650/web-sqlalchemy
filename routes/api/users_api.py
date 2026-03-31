@@ -16,7 +16,7 @@ def get_users():
 
     users = db.session.query(User).all()
     return jsonify({
-        'users': [user.to_dict(only=('id', 'surname', 'name', 'email', 'position'))
+        'users': [user.to_dict(only=('id', 'surname', 'name', 'email', 'position', 'city_from'))
                   for user in users]
     })
 
@@ -69,6 +69,7 @@ def create_user():
         address=request.json.get('address'),
         email=request.json['email'],
         active=request.json.get('active', True),
+        city_from=request.json.get('city_from'),
         fs_uniquifier=str(uuid.uuid4())
     )
 
@@ -121,6 +122,8 @@ def update_user(user_id):
         user.speciality = request.json['speciality']
     if 'address' in request.json:
         user.address = request.json['address']
+    if 'city_from' in request.json:
+        user.city_from = request.json['city_from']
     if 'email' in request.json:
         existing = db.session.query(User).filter(
             User.email == request.json['email'],
