@@ -11,6 +11,8 @@ from .html.user_map import user_map_bp
 
 from .api import api_bp
 
+from .api.v2 import init_api_v2
+
 
 def register_all_blueprints(app):
     app.register_blueprint(logs_bp)
@@ -25,3 +27,5 @@ def register_all_blueprints(app):
     app.register_blueprint(user_map_bp)
 
     app.register_blueprint(api_bp)
+
+    init_api_v2(app)

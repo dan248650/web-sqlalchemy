@@ -14,9 +14,8 @@ body {
 }
 
 .container-custom {
-    width: 90%;
-    max-width: 1400px;
-    margin: 20px auto;
+    width: 96%;
+    margin: 5px auto;
     background: white;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
@@ -54,13 +53,13 @@ body {
 .mars-one-label {
     font-size: 1.3em;
     font-weight: bold;
-    color: #c1440e;
+    color: #2144ee;
     text-transform: uppercase;
     letter-spacing: 2px;
-    background: rgba(193, 68, 14, 0.1);
+    background: rgba(54, 68, 235, 0.25);
     padding: 5px 15px;
     border-radius: 25px;
-    border: 2px solid #c1440e;
+    border: 2px solid #2144ee;
     white-space: nowrap;
 }
 
@@ -82,13 +81,13 @@ body {
 }
 
 main {
-    padding: 20px;
+    padding: 15px;
 }
 
 .login-container, .register-container {
     max-width: 500px;
-    margin: 30px auto;
-    padding: 30px;
+    margin: 20px auto;
+    padding: 20px;
     background: white;
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0,0,0,0.1);
@@ -97,7 +96,7 @@ main {
 
 .login-container h1, .register-container h1 {
     color: #111aaa;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     font-size: 2em;
     text-align: center;
 }
@@ -363,13 +362,13 @@ main {
 }
 
 .log-container {
-    padding: 20px 0;
+    padding: 15px 0;
 }
 
 .log-container h2 {
     color: #111aaa;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
     border-bottom: 2px solid #c1440e;
     text-align: center;
 }
@@ -378,7 +377,7 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
     gap: 15px;
 }
@@ -386,12 +385,12 @@ main {
 .log-header h2 {
     color: #111aaa;
     margin: 0;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
     border-bottom: 2px solid #c1440e;
 }
 
 .item-section {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .item-header {
@@ -443,8 +442,8 @@ main {
 }
 
 .footer-section {
-    margin-top: 20px;
-    padding: 20px;
+    margin-top: 15px;
+    padding: 15px;
     text-align: center;
     color: #6c757d;
     border-top: 1px solid #dee2e6;

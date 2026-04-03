@@ -102,6 +102,8 @@ def init_database():
                 print(f"Admin password: {password}")
 
                 admin_user = User(
+                    name='Admin',
+                    surname='',
                     email='admin@mars.org',
                     city_from='Moscow, Russia',
                     fs_uniquifier=str(uuid.uuid4()),

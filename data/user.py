@@ -44,7 +44,8 @@ class User(db.Model, UserMixin, SerializerMixin):
     fs_uniquifier = sqlalchemy.Column(sqlalchemy.String, unique=True)
 
     jobs = orm.relationship('Jobs', back_populates='user')
-    roles = orm.relationship('Role', secondary='user_role', back_populates='users')
+    roles = orm.relationship('Role', secondary='user_role', back_populates='users',
+                             cascade='all, delete')
 
     chief_of_departments = orm.relationship(
         'Department',
@@ -55,13 +56,15 @@ class User(db.Model, UserMixin, SerializerMixin):
     member_of_departments = orm.relationship(
         'Department',
         secondary='department_members',
-        back_populates='members'
+        back_populates='members',
+        cascade='all, delete'
     )
 
     collaborating_jobs = orm.relationship(
         'Jobs',
         secondary='job_collaborators',
-        back_populates='collaborators'
+        back_populates='collaborators',
+        cascade='all, delete'
     )
 
     def set_password(self, password):
