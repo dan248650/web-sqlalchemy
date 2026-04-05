@@ -280,7 +280,7 @@ def main():
         print("ОШИБКА: Сервер не доступен!")
         return
 
-    cookies = api_login("admin@mars.org", password="WPUevGhB")
+    cookies = api_login("admin@mars.org", password="KgM7RBNA")
 
     if cookies:
         # POST
